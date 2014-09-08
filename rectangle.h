@@ -1,0 +1,78 @@
+#ifndef rec
+#define rec
+
+#include<SFML/Graphics.hpp>
+#include<SFML/Window.hpp>
+#include<SFML/Audio.hpp>
+#include<list>
+#include<unistd.h>												   // for usleep(miliseconds);
+#include<time.h>
+#include<random>
+
+#include "constants.h"
+
+using namespace sf;
+
+
+class Rectangle: public Drawable{
+public:
+	RectangleShape rect;
+	Rectangle(Color col, float posx, float posy){
+		rect.setFillColor(col);
+		rect.setPosition(posx,posy);
+		
+		Vector2f vector;
+		vector.x = windowWidth / numBars;
+		vector.y = (float)(rand() % windowHeight);
+		rect.setSize(vector);
+		
+		rect.setRotation(180);
+	}
+
+	~Rectangle(){
+	}
+
+	inline bool operator>(Rectangle other){
+		return rect.getSize().y > other.getSize().y;
+	}	  
+	inline bool operator>=(Rectangle other){
+		return rect.getSize().y >= other.getSize().y;
+	}		  
+	inline bool operator<(Rectangle other){
+		return rect.getSize().y < other.getSize().y;
+	}		  
+	inline bool operator<=(Rectangle other){
+	 	return rect.getSize().y <= other.getSize().y;
+	}
+
+
+	// Getters
+	inline Color getFillColor(){
+		return rect.getFillColor();
+	}
+
+	inline Vector2f getSize(){
+		return rect.getSize();
+	}
+
+	inline float getPos(){
+		return rect.getPosition().x;
+	}
+
+	// Setters
+	inline void setPos(float posx){
+		rect.setPosition(posx, rect.getPosition().y);
+	}
+
+	inline void setScale(float factorX, float factorY){
+		rect.setScale(factorX,factorY);
+	}
+private:
+	
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const{
+		target.draw(rect,states);
+	}
+};
+
+
+#endif
